@@ -4,8 +4,6 @@ namespace Tests\Feature\Http\Controllers;
 
 use App\Chapter;
 use App\Comment;
-use App\User;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Tests\TestCase;
 
 class ChapterControllerTest extends TestCase
@@ -22,14 +20,14 @@ class ChapterControllerTest extends TestCase
             });
     }
 
-    public function testIndex()
+    public function testIndex(): void
     {
         $response = $this->get(route('chapters.index'));
 
         $response->assertOk();
     }
 
-    public function testShow()
+    public function testShow(): void
     {
         $chapter = Chapter::inRandomOrder()->first();
         $chapter->comments()->saveMany(

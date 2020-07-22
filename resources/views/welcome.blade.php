@@ -9,7 +9,11 @@
 <div class="row">
     <div class="col-md-8">
         <a href="https://mitpress.mit.edu/sites/default/files/sicp/index.html">
-            <img class="img-fluid" src="{{ asset('img/Patchouli_Gives_SICP.png') }}" alt="Начать изучать sicp">
+            @if(rand(0, 10) === 0)
+                <img class="img-fluid" src="{{ asset('img/advice_dog.jpg') }}" alt="Начать изучать sicp">
+            @else
+                <img class="img-fluid" src="{{ asset('img/Patchouli_Gives_SICP.png') }}" alt="Начать изучать sicp">
+            @endif
         </a>
     </div>
     <div class="col-md-4">
@@ -30,7 +34,7 @@
             @endforeach
 
         </ul>
-        <a class="btn btn-primary" href="{{ (route('my')) }}">{{ __('layout.welcome.mark_read') }}</a>
+        <a class="btn btn-primary btn-lg" href="{{ (route('my')) }}">{{ __('layout.welcome.start_learning') }}</a>
     </div>
 </div>
 
@@ -57,16 +61,26 @@
                 @switch($logItem->description)
                     @case('completed_exercise')
                         <a href="{{ route('exercises.show', $logItem->getExtraProperty('exercise_id')) }}">
-                            {{ __('activitylog.action_'.$logItem->description) }}
+                            {{ getLogItemDescription($logItem) }}
+                        </a>
+                        @break
+                    @case('destroy_exercise')
+                        <a href="{{ route('exercises.show', $logItem->getExtraProperty('exercise_id')) }}">
+                            {{ getLogItemDescription($logItem) }}
                         </a>
                         @break
                     @case('commented')
                         <a href="{{ $logItem->getExtraProperty('url') }}">
-                            {{ __('activitylog.action_'.$logItem->description) }}
+                            {{ getLogItemDescription($logItem) }}
                         </a>
                         <span>
                         {{ $logItem->getExtraProperty('comment.content') }}
                         </span>
+                        @break
+                     @case('add_solution')
+                        <a href="{{ route('exercises.show', $logItem->getExtraProperty('exercise_id')) }}">
+                            {{ getLogItemDescription($logItem) }} {{ $logItem->getExtraProperty('exercise_path') }}
+                        </a>
                         @break
                     @case('removed')
                     @case('added')
@@ -75,7 +89,7 @@
                                href="#collapseExp{{ $logItem->id }}"
                                aria-expanded="false"
                                aria-controls="collapseExp{{ $logItem->id }}">
-                                {{ __('activitylog.action_'.$logItem->description) }}
+                                {{ getLogItemDescription($logItem) }}
                                 {{ $logItem->getExtraProperty('count') ?? count($logItem->getExtraProperty('chapters')) }}
                             </a>
                             <div class="collapse" id="collapseExp{{ $logItem->id }}">

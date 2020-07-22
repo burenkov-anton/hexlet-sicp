@@ -5,10 +5,11 @@ namespace App\Http\Controllers;
 use App\Chapter;
 use App\Exercise;
 use App\User;
+use Illuminate\View\View;
 
 class UserController extends Controller
 {
-    public function show(User $user)
+    public function show(User $user): View
     {
         $rating = getCalculatedRating();
         $userRatingPosition = $rating
@@ -28,14 +29,15 @@ class UserController extends Controller
         $user->load('readChapters', 'completedExercises');
         $chapters = Chapter::with('children', 'exercises')->get();
         $exercises = Exercise::all();
+        $completedExercises = $user->completedExercises->keyBy('exercise_id');
 
-        return view('user.show', [
-                'user' => $user,
-                'chapters' => $chapters,
-                'exercises' => $exercises,
-                'completedExercises' => $user->completedExercises->keyBy('exercise_id'),
-                'userRatingPosition' => $userRatingPosition,
-                'points' => $points,
-        ]);
+        return view('user.show', compact(
+            'user',
+            'chapters',
+            'exercises',
+            'completedExercises',
+            'userRatingPosition',
+            'points'
+        ));
     }
 }

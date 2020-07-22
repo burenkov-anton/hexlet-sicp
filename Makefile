@@ -1,5 +1,10 @@
+include make-compose.mk
+
 test:
 	php artisan test
+
+test-coverage:
+	php artisan test --coverage-clover build/logs/clover.xml
 
 setup: env-prepare sqlite-prepare install key db-prepare
 
@@ -18,6 +23,12 @@ lint:
 
 lint-fix:
 	composer phpcbf
+
+analyse:
+	composer run-script phpstan analyse
+
+config-clear:
+	php artisan config:clear
 
 deploy:
 	git push heroku master

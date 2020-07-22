@@ -12,17 +12,16 @@
 @section('content')
     <div class="row my-4">
         <div class="col-12 col-md-3">
-            <div class="sticky-top pt-4 mb-4 x-z-index-0" style="z-index: -1">
+            <div class="sticky-top pt-4 mb-4 x-z-index-0">
                 <div class="card">
-                    <div class="card-head"></div>
-                    <img class="card-img-top" src="https://www.gravatar.com/avatar/{{ md5($user->email) }}?s=500" alt="Card image cap">
+                    <img class="card-img-top" src="{{ getProfileImageLink($user) }}" alt="Card image cap">
                     <div class="card-body">
                         <h3 class="card-text">{{ $user->name }}</h3>
                     </div>
                     <ul class="list-group-flush list-group border-top">
                         <li class="list-group-item">{{ __('user.show.statistics.rating_position') }} {{ $userRatingPosition }}</li>
                         <li class="list-group-item">{{ __('user.show.statistics.points') }} {{ $points }}</li>
-                        <li class="list-group-item">{{ __('user.show.statistics.read_chapters') }} {{ $user->readChapters->count() }} / {{ $chapters->count() }}</li>
+                        <li class="list-group-item">{{ __('user.show.statistics.read_chapters') }} {{ $user->readChapters->count() }} / {{ App\Chapter::MARKABLE_COUNT }}</li>
                         <li class="list-group-item">{{ __('user.show.statistics.completed_exercises') }} {{ $user->completedExercises()->count() }} / {{ $exercises->count() }}</li>
                         <li class="list-group-item">{{ __('user.show.statistics.left_comments') }} {{ $user->comments->count() }}</li>
                     </ul>

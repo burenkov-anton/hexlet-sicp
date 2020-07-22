@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Exercise;
 use App\User;
+use App\Solution;
+use Illuminate\View\View;
 
 class ExerciseController extends Controller
 {
-    public function index()
+    public function index(): View
     {
         $exercisesGroups = Exercise::all()
             ->groupBy(function (Exercise $exercise) {
@@ -16,7 +18,7 @@ class ExerciseController extends Controller
         return view('exercise.index', compact('exercisesGroups'));
     }
 
-    public function show(Exercise $exercise)
+    public function show(Exercise $exercise): View
     {
         $exercise->load('chapter', 'users');
         $authUser = auth()->user() ?? User::make([]);
@@ -24,6 +26,21 @@ class ExerciseController extends Controller
             ->where('exercise_id', $exercise->id)
             ->exists();
 
-        return view('exercise.show', compact('exercise', 'userCompletedExercise', 'authUser'));
+        $previousExercise = Exercise::whereId($exercise->id - 1)->firstOrNew([]);
+        $nextExercise = Exercise::whereId($exercise->id + 1)->firstOrNew([]);
+
+        $solutions = $authUser->solutions()
+            ->where('exercise_id', $exercise->id)
+            ->orderBy('id', 'desc')
+            ->get();
+
+        return view('exercise.show', compact(
+            'exercise',
+            'userCompletedExercise',
+            'authUser',
+            'previousExercise',
+            'nextExercise',
+            'solutions'
+        ));
     }
 }

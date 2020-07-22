@@ -24,3 +24,23 @@ if (!function_exists('getExerciseTitle')) {
         return null;
     }
 }
+
+if (!function_exists('getExerciseOriginLink')) {
+    function getExerciseOriginLink(Exercise $exercise): ?string
+    {
+        $links = require resource_path('exercise-links.php');
+
+        return $links[$exercise->path] ?? null;
+    }
+}
+
+if (!function_exists('getExercise')) {
+    function getExercise(string $path): Exercise
+    {
+        $exercise = Exercise::query()
+            ->where('path', $path)
+            ->first();
+
+        return $exercise;
+    }
+}

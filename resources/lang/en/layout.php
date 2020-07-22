@@ -3,14 +3,15 @@
 return [
     'nav' => [
         'name' => 'Hexlet SICP',
+        'pages' => 'Pages',
         'rating'   => 'Rating',
         'logout'   => 'Logout',
         'login'    => 'Login',
         'register' => 'Register',
-        'my_progress'  => 'My progress',
-        'sicp_read' => 'How to read SICP',
-        'chapters' => 'Table of Contents',
-        'exercises' => 'List of Exercises',
+        'my_progress'  => 'Progress',
+        'sicp_read' => 'How to read',
+        'chapters' => 'Contents',
+        'exercises' => 'Exercises',
         'sicp_book' => 'Book',
     ],
     'login' => [
@@ -18,11 +19,11 @@ return [
         'remember_me' => 'Remember Me',
         'password' => 'Password',
         'button' => 'Login',
-        'email' => 'Email',
+        'email' => 'E-mail',
         'reset_password' => 'Forgot Your Password?'
     ],
     'welcome' => [
-        'mark_read' => 'Mark read',
+        'start_learning' => 'Start learning',
     ],
     'footer' => [
         'about'             => 'About',
@@ -39,6 +40,9 @@ return [
         'error' => 'Aw, Snap! Something went wrong'
     ],
     'common' => [
-        'cancel' => 'Сancel'
+        'cancel' => 'Сancel',
+        'close' => 'Close',
+        'origin' => 'Go to origin',
+        'save' => 'Save',
     ]
 ];
