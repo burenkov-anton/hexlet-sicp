@@ -1,6 +1,10 @@
 <?php
 
 return [
+    'meta' => [
+        'description' =>
+            'SICP conqueror, in which there is a rating of those who pass the SICP, and everyone notes that he passed.',
+    ],
     'nav' => [
         'name' => 'Hexlet SICP',
         'pages' => 'Pages',
@@ -34,6 +38,14 @@ return [
         'blog'              => 'Blog',
         'recommended_books' => 'Recommended books',
         'additionally'      => 'Additionally',
+        'os_projects' => [
+            'editor' => 'Hexlet Editor',
+            'cv' => 'Hexlet CV',
+            'friends' => 'Hexlet Friends',
+            'code_basics' => 'Code Basics',
+            'codebattle' => 'CodeBattle',
+            'guides' => 'Hexlet Guides',
+        ],
     ],
     'flash' => [
         'success' => 'Success',

@@ -5,10 +5,11 @@
  * @var \Illuminate\Support\Collection|\App\Exercise[] $exercises
  */
 @endphp
+@section('description'){{ __('exercise.index.description') }}@endsection
 @section('content')
     <div class="row">
         <div class="col">
-            <h3>{{ __('layout.nav.exercises') }}</h3>
+            <h1 class="h3">{{ __('layout.nav.exercises') }}</h1>
         </div>
     </div>
     <div class="row mt-2">

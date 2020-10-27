@@ -60,7 +60,7 @@
                 </div>
                 @switch($logItem->description)
                     @case('completed_exercise')
-                        {{ getLogItemDescription($logItem) }} 
+                        {{ getLogItemDescription($logItem) }}
                         <a href="{{ route('exercises.show', $logItem->getExtraProperty('exercise_id')) }}">
                             {{ $logItem->subject->path }} {{ getExerciseTitle($logItem->subject) }}
                         </a>
@@ -80,7 +80,7 @@
                         </span>
                         @break
                      @case('add_solution')
-                        {{ getLogItemDescription($logItem) }} 
+                        {{ getLogItemDescription($logItem) }}
                         <a href="{{ route('exercises.show', $logItem->getExtraProperty('exercise_id')) }}">
                             {{ $logItem->getExtraProperty('exercise_path') }} {{ getExerciseTitle(getExercise($logItem->getExtraProperty('exercise_path'))) }}
                         </a>
@@ -93,13 +93,16 @@
                                aria-expanded="false"
                                aria-controls="collapseExp{{ $logItem->id }}">
                                 {{ getLogItemDescription($logItem) }}
-                                {{ $logItem->getExtraProperty('count') ?? count($logItem->getExtraProperty('chapters')) }}
                             </a>
                             <div class="collapse" id="collapseExp{{ $logItem->id }}">
                                 @if($logItem->getExtraProperty('chapters'))
                                     <ul>
                                         @foreach(($logItem->getExtraProperty('chapters')) as $chapter)
-                                            <li>{{ $chapter }} {{ getChapterName($chapter) }}</li>
+                                            <li>
+                                                <a href="{{ getChapterOriginLinkForNumber($chapter) }}">
+                                                    {{ $chapter }} {{ getChapterName($chapter) }}
+                                                </a>
+                                            </li>
                                         @endforeach
                                     </ul>
                                 @endif

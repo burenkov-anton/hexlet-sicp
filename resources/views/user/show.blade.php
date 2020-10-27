@@ -8,6 +8,7 @@
  * @var \App\User $user
  */
 @endphp
+@section('description', $user->name)
 @section('content')
     <div class="row my-4">
         <div class="col-12 col-md-3">
@@ -34,12 +35,21 @@
                     {{ $user->created_at->isoFormat('MMMM Do YYYY') }}
                     @endif
                 </div>
-                @auth
-                <div class="small mt-4">
-                    <a class="text-muted" href="{{ route('settings.profile.index') }}">
-                        {{ __('user.show.statistics.edit_profile') }}
+                @if ($user->github_name)
+                <div class="mt-3">
+                    <a class="x-link-without-decoration mr-2 mb-2 text-dark" target="_blank" rel="noopener noreferrer" href="https://github.com/{{ $user->github_name }}">
+                        <i class="fab fa-github fa-2x"></i>
                     </a>
                 </div>
+                @endif
+                @auth
+                    @if (Auth::user()->id === $user->id)
+                        <div class="small mt-4">
+                            <a class="text-muted" href="{{ route('settings.profile.index') }}">
+                                {{ __('user.show.statistics.edit_profile') }}
+                            </a>
+                        </div>
+                    @endif
                 @endauth
             </div>
         </div>

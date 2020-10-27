@@ -3,7 +3,7 @@
 @section('content')
     <div class="row my-4">
         <div class="col-12 my-4">
-            <h3>{{ __('activitylog.title') }}</h3>
+            <h1 class="h3">{{ __('activitylog.title') }}</h1>
 
             <div class="table-responsive">
                 <table class="table table-striped">
@@ -27,18 +27,15 @@
                                 <td>
                                 @switch($logItem->description)
                                     @case('added')
-                                        {{ getLogItemDescription($logItem) }}
-                                        <ul>
-                                            @foreach($logItem->getExtraProperty('chapters') as $chapter)
-                                            <li>{{ $chapter }} {{ getChapterName($chapter) }}</li>
-                                            @endforeach
-                                        </ul>
-                                        @break
                                     @case('removed')
                                         {{ getLogItemDescription($logItem) }}
                                         <ul>
                                             @foreach($logItem->getExtraProperty('chapters') as $chapter)
-                                            <li>{{ $chapter }} {{ getChapterName($chapter) }}</li>
+                                            <li>
+                                                <a href="{{ getChapterOriginLinkForNumber($chapter) }}">
+                                                    {{ $chapter }} {{ getChapterName($chapter) }}
+                                                </a>
+                                            </li>
                                             @endforeach
                                         </ul>
                                         @break
