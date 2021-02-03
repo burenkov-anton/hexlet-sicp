@@ -2,62 +2,37 @@
 
 namespace Tests\Feature\Http\Controllers;
 
-use Illuminate\Support\Collection;
-use Tests\TestCase;
-use App\Solution;
-use App\User;
+use App\Models\Solution;
+use Tests\ControllerTestCase;
 
-class SolutionControllerTest extends TestCase
+class SolutionControllerTest extends ControllerTestCase
 {
-    private User $user;
-
     public function setUp(): void
     {
         parent::setUp();
-        $this->user = factory(User::class)->create();
+        $solutions = factory(Solution::class, 5)->make();
+        $this->user->solutions()->saveMany($solutions);
 
-        $this->actingAs($this->user)
-            ->get('/');
+        $this->actingAs($this->user);
     }
 
-    public function testStore(): void
+    public function testIndex(): void
     {
-        $factoryData = factory(Solution::class)->make([
-            'user_id' => $this->user->id,
-        ])->toArray();
-        $data = \Arr::only($factoryData, ['exercise_id', 'user_id', 'content']);
-        $response = $this->post(route('users.solutions.store', $this->user), $data);
+        $route = route('solutions.index');
 
-        $response->assertSessionHasNoErrors();
-        $response->assertRedirect();
+        $response = $this->get($route);
 
-        $this->assertDatabaseHas('solutions', $data);
+        $response->assertSessionDoesntHaveErrors();
+        $response->assertOk();
     }
 
     public function testShow(): void
     {
-        /** @var Collection $solutions */
-        $solutions = $this->user->solutions()->saveMany(
-            factory(Solution::class, 5)
-            ->make()
-        );
+        $solution = Solution::inRandomOrder()->first();
+        $route = route('solutions.show', $solution);
 
-        $solution = $solutions->first();
-
-        $response = $this->get(route('users.solutions.show', [$this->user, $solution]));
-
+        $response = $this->get($route);
+        $response->assertSessionDoesntHaveErrors();
         $response->assertOk();
-    }
-
-    public function testDestroy(): void
-    {
-        $solution = factory(Solution::class)->create([
-            'user_id' => $this->user->id,
-        ]);
-        $response = $this->delete(route('users.solutions.destroy', [$this->user, $solution]));
-        $response->assertSessionHasNoErrors();
-        $response->assertRedirect();
-
-        $this->assertDatabaseMissing('solutions', ['id' => $solution->id]);
     }
 }

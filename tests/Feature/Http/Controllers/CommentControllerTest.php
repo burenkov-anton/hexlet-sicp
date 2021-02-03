@@ -2,22 +2,19 @@
 
 namespace Tests\Feature\Http\Controllers;
 
-use App\Chapter;
-use App\Comment;
-use App\Exercise;
-use App\User;
+use App\Models\Chapter;
+use App\Models\Comment;
+use App\Models\Exercise;
+use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Model;
-use Tests\TestCase;
+use Tests\ControllerTestCase;
 
-class CommentControllerTest extends TestCase
+class CommentControllerTest extends ControllerTestCase
 {
-    private User $user;
-
     public function setUp(): void
     {
         parent::setUp();
-        $this->user = factory(User::class)->create();
         factory(Chapter::class, 2)
             ->create()
             ->each(
@@ -32,7 +29,22 @@ class CommentControllerTest extends TestCase
     /**
      * @dataProvider dataCommentable
      */
-    public function testStoreChapter(string $commentableClass): void
+    public function testShow(string $commentableClass): void
+    {
+        $this->actingAs($this->user);
+        $commentable = $commentableClass::inRandomOrder()->first();
+        $comment = $this->createComment($this->user, $commentable);
+        $route = route('comments.show', $comment);
+
+        $response = $this->get($route);
+        $response->assertRedirect();
+        $response->assertSessionHasNoErrors();
+    }
+
+    /**
+     * @dataProvider dataCommentable
+     */
+    public function testStore(string $commentableClass): void
     {
         /** @var Model $commentableClass */
         $commentable = $commentableClass::inRandomOrder()->first();
@@ -50,8 +62,12 @@ class CommentControllerTest extends TestCase
         ];
         $response = $this->post(route('comments.store'), $commentData);
 
-        $response->assertRedirect(sprintf("%s#comment-1", $visitedPage));
         $this->assertDatabaseHas('comments', $commentData);
+
+        // https://github.com/laravel/framework/issues/30467
+        $comment = Comment::where($commentData)->first();
+        $response->assertRedirect(sprintf("%s#comment-%s", $visitedPage, $comment->id));
+
         $this->get($visitedPage)->assertSee($commentData['content']);
     }
 
@@ -159,7 +175,7 @@ class CommentControllerTest extends TestCase
         $comment = factory(Comment::class)->state('with_user')->make();
         $commentable->comments()->save($comment);
 
-        $this->expectException(\Illuminate\Auth\Access\AuthorizationException::class);
+        $this->expectException(AuthorizationException::class);
         $response = $this->delete(
             route('comments.destroy', compact('comment'))
         );

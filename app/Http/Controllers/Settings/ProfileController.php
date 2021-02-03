@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Settings;
 
-use App\User;
+use App\Models\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -41,9 +41,16 @@ class ProfileController extends Controller
                 'max:255',
                 Rule::unique('users')->ignore($user),
             ],
+            'hexlet_nickname' => [
+                'nullable',
+                'min:2',
+                'max:255',
+                Rule::unique('users')->ignore($user),
+            ],
         ]);
         $user->name = $request->get('name');
         $user->github_name = $request->get('github_name');
+        $user->hexlet_nickname = $request->get('hexlet_nickname');
 
         if ($user->save()) {
             flash()->success(__('account.account_updated'));

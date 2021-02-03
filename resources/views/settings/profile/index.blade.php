@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @php
 /**
- * @var \App\User $user
+ * @var \App\Models\User $user
  */
 @endphp
 @section('content')
@@ -16,6 +16,7 @@
                             {{ BsForm::patch(route('settings.profile.update', [$user])) }}
                             {{ BsForm::text('name', $user->name)->label(__('register.namePlaceholder')) }}
                             {{ BsForm::text('github_name', $user->github_name)->label(__('account.github_name')) }}
+                            {{ BsForm::text('hexlet_nickname', $user->hexlet_nickname)->label(__('account.hexlet_nickname')) }}
                             <div class="form-group mb-0">
                                 {{ BsForm::submit(__('layout.common.save'))->primary() }}
                             </div>

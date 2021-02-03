@@ -2,19 +2,15 @@
 
 namespace Tests\Feature\Http\Controllers;
 
-use App\Chapter;
-use App\User;
+use App\Models\Chapter;
 use Illuminate\Auth\AuthenticationException;
-use Tests\TestCase;
+use Tests\ControllerTestCase;
 
-class MyControllerTest extends TestCase
+class MyControllerTest extends ControllerTestCase
 {
-    private User $user;
-
     public function setUp(): void
     {
         parent::setUp();
-        $this->user = factory(User::class)->create();
         $this->user->chapters()->saveMany(
             factory(Chapter::class, 2)->make()
         );

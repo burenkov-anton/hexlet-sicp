@@ -1,10 +1,12 @@
 <?php
 
-use App\User;
+namespace App\Helpers;
 
-if (!function_exists('getProfileImageLink')) {
+use App\Models\User;
 
-    function getProfileImageLink(User $user): string
+class UserHelper
+{
+    public static function getProfileImageLink(User $user): string
     {
         $email = $user->email;
         $encryptEmail = md5($email);
